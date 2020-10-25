@@ -2,7 +2,7 @@
 
 ![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
-
+A Helm chart for Kubernetes
 This chart is using the official fluentd image to deploy on k8s as deamonset.
 Check image on https://github.com/fluent/fluentd-kubernetes-daemonset/tree/master/docker-image/v1.11/debian-elasticsearch7
 
@@ -16,12 +16,7 @@ This chart enable ilm by default.
 | affinity | object | `{}` |  |
 | elasticsearch.host | string | `"elasticsearch-master.monitoring"` |  |
 | elasticsearch.ilm.enabled | bool | `true` |  |
-| elasticsearch.ilm.policy.policy.phases.delete.actions.delete | string | `nil` |  |
-| elasticsearch.ilm.policy.policy.phases.delete.min_age | string | `"20d"` |  |
-| elasticsearch.ilm.policy.policy.phases.hot.actions.rollover.max_age | string | `"10d"` |  |
-| elasticsearch.ilm.policy.policy.phases.hot.actions.rollover.max_size | string | `"20gb"` |  |
-| elasticsearch.ilm.policy.policy.phases.hot.actions.set_priority.priority | int | `100` |  |
-| elasticsearch.ilm.policy.policy.phases.hot.min_age | string | `"0ms"` |  |
+| elasticsearch.ilm.policy | string | `"{\n  \"policy\": {\n    \"phases\": {\n      \"hot\": {\n        \"min_ages\": \"0ms\",\n        \"actions\": {\n          \"rollover\": {\n            \"max_age\": \"10d\",\n            \"max_size\": \"20gb\"\n          },\n          \"set_priority\": {\n            \"priority\": 100\n          }\n        }\n      }\n    }\n  }\n}\n"` |  |
 | elasticsearch.ilm.policy_id | string | `"logstash-policy"` |  |
 | elasticsearch.ilm.policy_overwrite | bool | `false` |  |
 | elasticsearch.password | string | `"fluentd-password"` |  |
