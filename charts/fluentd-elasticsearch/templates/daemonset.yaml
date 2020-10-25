@@ -43,7 +43,7 @@ spec:
             - name: FLUENT_ELASTICSEARCH_PASSWORD
               value: {{ .Values.elasticsearch.password | quote }}
             - name: FLUENT_ELASTICSEARCH_ENABLE_ILM
-              value: {{ .Values.elasticsearch.ilm.enabled }}
+              value: {{ .Values.elasticsearch.ilm.enabled | quote}}
             - name: FLUENT_ELASTICSEARCH_ILM_POLICY_ID
               value: {{ .Values.elasticsearch.ilm.policy_id | quote }}
             - name: FLUENT_ELASTICSEARCH_ILM_POLICY
