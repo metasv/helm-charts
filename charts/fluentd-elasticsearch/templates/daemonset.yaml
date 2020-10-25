@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: DaemonSet 
+metadata:
+  name: {{ include "fluentd-elasticsearch.fullname" . }}
+  labels:
+    {{- include "fluentd-elasticsearch.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "fluentd-elasticsearch.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "fluentd-elasticsearch.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "fluentd-elasticsearch.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: FLUENT_ELASTICSEARCH_HOST
+              value: {{ .Values.elasticsearch.host | quote }}
+            - name: FLUENT_ELASTICSEARCH_PORT
+              value: {{ .Values.elasticsearch.port | quote }}
+              # todo: save user & password in secret
+            - name: FLUENT_ELASTICSEARCH_USER
+              value: {{ .Values.elasticsearch.user | quote }}
+            - name: FLUENT_ELASTICSEARCH_PASSWORD
+              value: {{ .Values.elasticsearch.password | quote }}
+
+            {{- if .Values.elasticsearch.ilm.enabled -}}
+            - name: FLUENT_ELASTICSEARCH_ENABLE_ILM
+              value: {{ .Values.elasticsearch.ilm.enabled }}
+            - name: FLUENT_ELASTICSEARCH_ILM_POLICY_ID
+              value: {{ .Values.elasticsearch.ilm.policy_id | quote }}
+            - name: FLUENT_ELASTICSEARCH_ILM_POLICY
+              value: {{ toJson .Values.elasticsearch.ilm.policy | quote }}
+            - name: FLUENT_ELASTICSEARCH_ILM_POLICY_OVERWRITE
+              value: {{ .Values.elasticsearch.ilm.policy_overwrite | quote }}
+            {{- end -}}
+            
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

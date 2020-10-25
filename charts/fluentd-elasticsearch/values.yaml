@@ -1,0 +1,78 @@
+# Default values for fluentd-elasticsearch.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: fluent/fluentd-kubernetes-daemonset
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: v1-debian-elasticsearch
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+elasticsearch: 
+  host: elasticsearch-master.monitoring
+  port: 9200
+  user: fluentd-user
+  password: fluentd-password
+  ilm:
+    enabled: true
+    policy_id: logstash-policy
+    policy:
+      policy:
+        phases:
+          hot:
+            min_age: 0ms
+            actions:
+              rollover:
+                max_age: 10d
+                max_size: 20gb
+              set_priority:
+                  priority: 100
+          delete:
+            min_age: 20d
+            actions:
+              delete:
+    policy_overwrite: false
