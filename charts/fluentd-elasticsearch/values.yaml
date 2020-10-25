@@ -62,3 +62,13 @@ elasticsearch:
     policy_id: logstash-policy
     policy: '{"policy":{"phases":{"hot":{"min_ages":"0ms","actions":{"rollover":{"max_age":"10d","max_size":"20gb"},"set_priority":{"priority":100}}}}}}'
     policy_overwrite: false
+
+rbac:
+  create: true
+
+serviceAccount:
+  # Specifies whether a ServiceAccount should be created
+  create: true
+  # The name of the ServiceAccount to use.
+  # If not set and create is true, a name is generated using the fullname template
+  annotations: {}
