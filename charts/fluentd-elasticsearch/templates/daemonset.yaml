@@ -42,8 +42,6 @@ spec:
               value: {{ .Values.elasticsearch.user | quote }}
             - name: FLUENT_ELASTICSEARCH_PASSWORD
               value: {{ .Values.elasticsearch.password | quote }}
-
-            {{- if .Values.elasticsearch.ilm.enabled -}}
             - name: FLUENT_ELASTICSEARCH_ENABLE_ILM
               value: {{ .Values.elasticsearch.ilm.enabled }}
             - name: FLUENT_ELASTICSEARCH_ILM_POLICY_ID
@@ -52,7 +50,6 @@ spec:
               value: {{ .Values.elasticsearch.ilm.policy | quote }}
             - name: FLUENT_ELASTICSEARCH_ILM_POLICY_OVERWRITE
               value: {{ .Values.elasticsearch.ilm.policy_overwrite | quote }}
-            {{- end -}}
             
       {{- with .Values.nodeSelector }}
       nodeSelector:
