@@ -60,19 +60,24 @@ elasticsearch:
   ilm:
     enabled: true
     policy_id: logstash-policy
-    policy:
-      policy:
-        phases:
-          hot:
-            min_age: 0ms
-            actions:
-              rollover:
-                max_age: 10d
-                max_size: 20gb
-              set_priority:
-                  priority: 100
-          delete:
-            min_age: 20d
-            actions:
-              delete:
+    policy: |
+      {
+        "policy": {
+          "phases": {
+            "hot": {
+              "min_ages": "0ms",
+              "actions": {
+                "rollover": {
+                  "max_age": "10d",
+                  "max_size": "20gb"
+                },
+                "set_priority": {
+                  "priority": 100
+                }
+              }
+            }
+          }
+        }
+      }
+      
     policy_overwrite: false
