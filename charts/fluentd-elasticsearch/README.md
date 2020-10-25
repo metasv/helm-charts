@@ -16,7 +16,7 @@ This chart enable ilm by default.
 | affinity | object | `{}` |  |
 | elasticsearch.host | string | `"elasticsearch-master.monitoring"` |  |
 | elasticsearch.ilm.enabled | bool | `true` |  |
-| elasticsearch.ilm.policy | string | `"{\n  \"policy\": {\n    \"phases\": {\n      \"hot\": {\n        \"min_ages\": \"0ms\",\n        \"actions\": {\n          \"rollover\": {\n            \"max_age\": \"10d\",\n            \"max_size\": \"20gb\"\n          },\n          \"set_priority\": {\n            \"priority\": 100\n          }\n        }\n      }\n    }\n  }\n}\n"` |  |
+| elasticsearch.ilm.policy | string | `"{\"policy\":{\"phases\":{\"hot\":{\"min_ages\":\"0ms\",\"actions\":{\"rollover\":{\"max_age\":\"10d\",\"max_size\":\"20gb\"},\"set_priority\":{\"priority\":100}}}}}}"` |  |
 | elasticsearch.ilm.policy_id | string | `"logstash-policy"` |  |
 | elasticsearch.ilm.policy_overwrite | bool | `false` |  |
 | elasticsearch.password | string | `"fluentd-password"` |  |
